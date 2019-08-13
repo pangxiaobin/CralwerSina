@@ -50,7 +50,7 @@ def get_context(status):
         ren_zheng = '普通用户'
         created_at = status.get('created_at', '')
         if created_at:
-            created_at = datetime.strftime(parse(created_at), '%Y-%m-%d')
+            created_at = datetime.strftime(parse(created_at), '%Y-%m-%d %H:%M:S')
         text = status.get('text', '')
         if text:
             text = script_html(text)
