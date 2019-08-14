@@ -15,9 +15,6 @@ from helper import get_text, url_to_mid
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-# url = 'https://weibo.com/1926909715/I22YbxDwU?ref=home&rid=0_0_8_3068432500071398696_0_0_0&type=comment#_rnd1565688908814'
-
-
 def get_mid(url):
     re_rule = 'https:\/\/weibo\.com\/\d+\/(\w+?)\?'
     base62_url = re.findall(re_rule, url)
@@ -50,7 +47,7 @@ def get_context(status):
         ren_zheng = '普通用户'
         created_at = status.get('created_at', '')
         if created_at:
-            created_at = datetime.strftime(parse(created_at), '%Y-%m-%d %H:%M:S')
+            created_at = datetime.strftime(parse(created_at), '%Y-%m-%d %H:%M:%S')
         text = status.get('text', '')
         if text:
             text = script_html(text)
@@ -61,6 +58,8 @@ def get_context(status):
             if verified:
                 ren_zheng = '金V认证'
             verified_reason = user.get('verified_reason', '')  # 认证描述
+            if verified_reason:
+                verified_reason = '认证信息:{}'.format(verified_reason)
             followers_count = user.get('followers_count', '')  # 粉丝量
         reposts_count = status.get('reposts_count', '')  # 转发量
         comments_count = status.get('comments_count', '')  # 评论量
@@ -73,7 +72,7 @@ def get_context(status):
             for i in pics:
                 image_url = i.get('url')
                 image_url_list.append(image_url)
-        s = '{}\n{}\n发布时间：{}\n发布情况：{},{},粉丝量：{}\n转发：{},评论：{},点赞{}\n'.format(user_name, text, created_at,
+        s = '{}\n{}\n发布时间：{}\n发布情况：{} {} 粉丝量：{}\n转发 {} 评论 {} 点赞 {}\n'.format(user_name, text, created_at,
                                                                             ren_zheng, verified_reason, followers_count,
                                                                             reposts_count, comments_count,
                                                                             attitudes_count)
@@ -92,16 +91,34 @@ def script_html(context):
 
 def run():
     while True:
-        print('输入q退出')
-        url = input('请输入微博连接：')
-        date_type = input('请输入类型')
-        if url == 'q' or date_type == 'q':
-            break
-        mid = get_mid(url)
+        d_type = {
+            '1': '负面',
+            '2': '中性',
+            '3': '正面'
+        }
+        print('输入Q退出\n')
+        while True:
+            url = input('请输入微博连接：')
+            if url == 'Q':
+                print('\n----ヾ(￣▽￣)Bye~Bye~----')
+                return None
+            mid = get_mid(url)
+            if mid:
+                break
+            print('请输入符合要求的微博链接')
         status = get_response(mid)
         result = get_context(status)
-        tem = '{}\n'.format(date_type) + result + '{}\n'.format(url)
+        print('请选择类型：\n1:负面\n2:中性\n3:正面')
+        while True:
+            tem = input('选择类型:')
+            data_type = d_type.get(str(tem), '')
+            if data_type:
+                break
+            print('请输入正确的数字')
+
+        tem = '{}\n'.format(data_type) + result + '{}\n'.format(url)
         write_context(tem)
+        print('😊---------new------------😊')
 
 
 def write_context(string):
