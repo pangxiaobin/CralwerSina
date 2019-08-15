@@ -118,7 +118,7 @@ def run():
 
         tem = '{}\n'.format(data_type) + result + '{}\n'.format(url)
         write_context(tem)
-        print('😊---------new------------😊')
+        print('(*^▽^*)---------new------------(*^▽^*)\n')
 
 
 def write_context(string):
@@ -134,3 +134,5 @@ def write_context(string):
 
 if __name__ == '__main__':
     run()
+    s = '\n分割线###############{}####################\n'.format(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'))
+    write_context(s)
