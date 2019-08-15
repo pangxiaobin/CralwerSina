@@ -42,12 +42,12 @@ def get_text(url, options={}):
     :return:
     """
     headers = dict(BASE_HEADERS, **options)
-    print('正在抓取------>💪💪💪')
+    print('正在抓取------>(*^▽^*)')
     try:
         res = requests.get(url, headers=headers, timeout=5)
         # print(res.status_code)
         if res.status_code == 200:
-            print('抓取成功------>😊😊😊')
+            print('抓取成功------>ヾ(◍°∇°◍)ﾉﾞ')
             return res
     except ConnectionError:
         print('抓取失败(灬ꈍ ꈍ灬)，请重试')
