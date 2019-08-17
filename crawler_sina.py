@@ -47,7 +47,7 @@ def get_context(status):
         ren_zheng = '普通用户'
         created_at = status.get('created_at', '')
         if created_at:
-            created_at = datetime.strftime(parse(created_at), '%Y-%m-%d %H:%M:%S')
+            created_at = datetime.strftime(parse(created_at), '%m{m}%d{d} %H:%M').format(m='月', d='日')
         text = status.get('text', '')
         if text:
             text = script_html(text)
@@ -59,7 +59,7 @@ def get_context(status):
                 ren_zheng = '金V认证'
             verified_reason = user.get('verified_reason', '')  # 认证描述
             if verified_reason:
-                verified_reason = '认证信息:{}'.format(verified_reason)
+                verified_reason = '认证信息:{}，'.format(verified_reason)
             followers_count = user.get('followers_count', '')  # 粉丝量
         reposts_count = status.get('reposts_count', '')  # 转发量
         comments_count = status.get('comments_count', '')  # 评论量
@@ -72,7 +72,7 @@ def get_context(status):
             for i in pics:
                 image_url = i.get('url')
                 image_url_list.append(image_url)
-        s = '{}\n{}\n发布时间：{}\n发布情况：{} {} 粉丝量：{}\n转发 {} 评论 {} 点赞 {}\n'.format(user_name, text, created_at,
+        s = '{}\n{}\n发布时间：{}\n发布情况：{}， {} 粉丝量： {}\n转发 {} 评论 {} 点赞 {}\n'.format(user_name, text, created_at,
                                                                             ren_zheng, verified_reason, followers_count,
                                                                             reposts_count, comments_count,
                                                                             attitudes_count)
@@ -108,7 +108,7 @@ def run():
             print('请输入符合要求的微博链接')
         status = get_response(mid)
         result = get_context(status)
-        print('请选择类型：\n1:负面\n2:中性\n3:正面')
+        print('\n请选择类型：\n1:负面\n2:中性\n3:正面')
         while True:
             tem = input('选择类型:')
             data_type = d_type.get(str(tem), '')
@@ -134,5 +134,5 @@ def write_context(string):
 
 if __name__ == '__main__':
     run()
-    s = '\n分割线###############{}####################\n'.format(datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'))
+    s = '\n'
     write_context(s)
