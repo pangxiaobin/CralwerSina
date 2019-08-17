@@ -21,13 +21,17 @@
 """
 
 import sys
+import os
+from datetime import datetime
 
 # from PySide2 import QtCore, QtWidgets, QtGui
 from PySide2 import QtCore
 from PySide2.QtWidgets import QWidget, QLabel, QLineEdit, QComboBox, QPushButton, QApplication, QFormLayout, \
     QHBoxLayout, QVBoxLayout, QMessageBox
 
-from crawler_sina import get_mid, get_response, get_context, write_context
+from crawler_sina import get_mid, get_response, get_context
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class MyWidget(QWidget):
@@ -90,7 +94,17 @@ class MyWidget(QWidget):
         self.url_edit.setText('')
         return True
 
-
+def write_context(string):
+    dirname = 'result'
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
+    result_path = os.path.join(BASE_DIR, dirname)
+    file_name = '{}.txt'.format(datetime.strftime(datetime.now(), '%Y-%m-%d'))
+    file_path = os.path.join(result_path, file_name)
+    with open(file_path, 'a+', encoding='utf8') as f:
+        f.write(string + '\n')
+		
+		
 def run():
     """运行入口"""
     app = QApplication(sys.argv)
