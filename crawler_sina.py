@@ -55,8 +55,16 @@ def get_context(status):
         if user:
             user_name = user.get('screen_name', '')  # 用户名
             verified = user.get('verified', '')  # 是否认证
+            verified_type = user.get('verified_type', '')  # 是否认证
+            verified_type_ext = user.get('verified_type_ext', '')  # 是否认证
             if verified:
-                ren_zheng = '金V认证'
+                if verified_type == 3:
+                    ren_zheng = "蓝V认证"
+                if verified_type == 0:
+                    if verified_type_ext == 1:
+                        ren_zheng = "金V认证"
+                    else:
+                        ren_zheng = '黄V认证'
             verified_reason = user.get('verified_reason', '')  # 认证描述
             if verified_reason:
                 verified_reason = '认证信息:{}，'.format(verified_reason)
@@ -72,7 +80,7 @@ def get_context(status):
             for i in pics:
                 image_url = i.get('url')
                 image_url_list.append(image_url)
-        s = '{}\n{}\n发布时间：{}\n发布情况：{}， {} 粉丝量： {}\n转发 {} 评论 {} 点赞 {}\n'.format(user_name, text, created_at,
+        s = '{}\n{}\n发布时间：{}\n发布情况：{}，{}粉丝量：{}\n转发{} 评论{} 点赞{}\n'.format(user_name, text, created_at,
                                                                             ren_zheng, verified_reason, followers_count,
                                                                             reposts_count, comments_count,
                                                                             attitudes_count)

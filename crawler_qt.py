@@ -94,6 +94,7 @@ class MyWidget(QWidget):
         self.url_edit.setText('')
         return True
 
+
 def write_context(string):
     dirname = 'result'
     if not os.path.exists(dirname):
@@ -103,8 +104,8 @@ def write_context(string):
     file_path = os.path.join(result_path, file_name)
     with open(file_path, 'a+', encoding='utf8') as f:
         f.write(string + '\n')
-		
-		
+
+
 def run():
     """运行入口"""
     app = QApplication(sys.argv)
@@ -114,5 +115,3 @@ def run():
 
 if __name__ == '__main__':
     run()
-
-
